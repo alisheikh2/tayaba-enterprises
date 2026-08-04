@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { isAuthenticatedRequest } from '@/lib/auth';
+import { connectToDatabase } from '@/lib/mongodb';
+import Client from '@/models/Client';
 
 const dataFilePath = path.join(process.cwd(), 'src/data/clientsData.json');
 
-function getClientsData() {
+function getClientsFromFile() {
   try {
     if (!fs.existsSync(dataFilePath)) {
       return [];
@@ -13,24 +15,58 @@ function getClientsData() {
     const content = fs.readFileSync(dataFilePath, 'utf8');
     return JSON.parse(content);
   } catch (error) {
-    console.error('Error reading clients data:', error);
+    console.error('Error reading clients file:', error);
     return [];
   }
 }
 
-function saveClientsData(clients: any[]) {
+function saveClientsToFile(clients: any[]) {
   try {
     fs.writeFileSync(dataFilePath, JSON.stringify(clients, null, 2), 'utf8');
   } catch (error) {
-    console.error('Error saving clients data:', error);
+    console.error('Error saving clients file:', error);
   }
 }
 
 export async function GET() {
-  const clients = getClientsData();
-  // Sort by displayOrder
-  clients.sort((a: any, b: any) => (a.displayOrder || 0) - (b.displayOrder || 0));
-  return NextResponse.json(clients);
+  try {
+    const db = await connectToDatabase();
+    if (db) {
+      let clients = await Client.find().sort({ displayOrder: 1 }).lean();
+
+      // Auto-seed if database is empty
+      if (clients.length === 0) {
+        const fileClients = getClientsFromFile();
+        if (fileClients.length > 0) {
+          const docsToInsert = fileClients.map((c: any, index: number) => ({
+            name: c.name,
+            logo: c.logo,
+            category: c.category || 'Corporate Client',
+            displayOrder: c.displayOrder || index + 1,
+          }));
+          await Client.insertMany(docsToInsert);
+          clients = await Client.find().sort({ displayOrder: 1 }).lean();
+        }
+      }
+
+      const formatted = clients.map((c: any) => ({
+        id: c._id.toString(),
+        name: c.name,
+        logo: c.logo,
+        category: c.category,
+        displayOrder: c.displayOrder,
+      }));
+
+      return NextResponse.json(formatted);
+    }
+  } catch (dbErr) {
+    console.warn('[api/clients] MongoDB read failed, falling back to local file:', dbErr);
+  }
+
+  // Fallback to local JSON file
+  const fileClients = getClientsFromFile();
+  fileClients.sort((a: any, b: any) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  return NextResponse.json(fileClients);
 }
 
 export async function POST(request: Request) {
@@ -40,18 +76,50 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const clients = getClientsData();
-    
+    const name = body.name || 'New Client';
+    const logo = body.logo || '/images/clients/siemens.png';
+    const category = body.category || 'Corporate Client';
+    const displayOrder = body.displayOrder ? Number(body.displayOrder) : 1;
+
+    try {
+      const db = await connectToDatabase();
+      if (db) {
+        const created = await Client.create({
+          name,
+          logo,
+          category,
+          displayOrder,
+        });
+
+        return NextResponse.json(
+          {
+            success: true,
+            client: {
+              id: created._id.toString(),
+              name: created.name,
+              logo: created.logo,
+              category: created.category,
+              displayOrder: created.displayOrder,
+            },
+          },
+          { status: 201 }
+        );
+      }
+    } catch (dbErr) {
+      console.warn('[api/clients] MongoDB insert failed, falling back to local file:', dbErr);
+    }
+
+    // Fallback to file storage
+    const clients = getClientsFromFile();
     const newClient = {
       id: 'client-' + Date.now(),
-      name: body.name || 'New Client',
-      logo: body.logo || '/images/clients/siemens.png',
-      category: body.category || 'Corporate Client',
-      displayOrder: body.displayOrder ? Number(body.displayOrder) : clients.length + 1
+      name,
+      logo,
+      category,
+      displayOrder,
     };
-
     clients.push(newClient);
-    saveClientsData(clients);
+    saveClientsToFile(clients);
 
     return NextResponse.json({ success: true, client: newClient }, { status: 201 });
   } catch (error) {
@@ -66,23 +134,47 @@ export async function PUT(request: Request) {
 
   try {
     const body = await request.json();
-    let clients = getClientsData();
+    const { id, name, logo, category, displayOrder } = body;
 
+    if (!id) {
+      return NextResponse.json({ error: 'Client ID required' }, { status: 400 });
+    }
+
+    try {
+      const db = await connectToDatabase();
+      if (db) {
+        const updateData: any = {};
+        if (name !== undefined) updateData.name = name;
+        if (logo !== undefined) updateData.logo = logo;
+        if (category !== undefined) updateData.category = category;
+        if (displayOrder !== undefined) updateData.displayOrder = Number(displayOrder);
+
+        const updated = await Client.findByIdAndUpdate(id, updateData, { new: true });
+        if (updated) {
+          return NextResponse.json({ success: true });
+        }
+      }
+    } catch (dbErr) {
+      console.warn('[api/clients] MongoDB update failed, falling back to local file:', dbErr);
+    }
+
+    // Fallback to file storage
+    let clients = getClientsFromFile();
     clients = clients.map((c: any) => {
-      if (c.id === body.id) {
+      if (c.id === id) {
         return {
           ...c,
-          name: body.name ?? c.name,
-          logo: body.logo ?? c.logo,
-          category: body.category ?? c.category,
-          displayOrder: body.displayOrder ? Number(body.displayOrder) : c.displayOrder
+          name: name ?? c.name,
+          logo: logo ?? c.logo,
+          category: category ?? c.category,
+          displayOrder: displayOrder ? Number(displayOrder) : c.displayOrder,
         };
       }
       return c;
     });
 
-    saveClientsData(clients);
-    return NextResponse.json({ success: true, clients });
+    saveClientsToFile(clients);
+    return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update client' }, { status: 500 });
   }
@@ -101,10 +193,21 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Client ID required' }, { status: 400 });
     }
 
-    let clients = getClientsData();
+    try {
+      const db = await connectToDatabase();
+      if (db) {
+        await Client.findByIdAndDelete(id);
+        return NextResponse.json({ success: true });
+      }
+    } catch (dbErr) {
+      console.warn('[api/clients] MongoDB delete failed, falling back to local file:', dbErr);
+    }
+
+    // Fallback to file storage
+    let clients = getClientsFromFile();
     clients = clients.filter((c: any) => c.id !== id);
 
-    saveClientsData(clients);
+    saveClientsToFile(clients);
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to delete client' }, { status: 500 });

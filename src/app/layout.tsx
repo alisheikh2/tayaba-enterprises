@@ -6,6 +6,7 @@ import FloatingSocial from "@/components/FloatingSocial";
 import SchemaData from "@/components/SchemaData";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://tayaba-enterprises.com'),
   title: "Tayaba Enterprises | Photocopier Machine Sales, Rental & Printing Solutions Karachi",
   description: "Established in 2003, Tayaba Enterprises is Karachi's trusted partner for photocopier machine sales, rentals, digital printing, scanning, typing, laminating, and fax services.",
   keywords: [

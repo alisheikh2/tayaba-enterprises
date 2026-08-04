@@ -18,7 +18,11 @@ import {
   ArrowLeft,
   List,
   Mail,
-  User
+  User,
+  Inbox,
+  Clock,
+  Phone,
+  MessageSquare
 } from 'lucide-react';
 import ConfirmModal from '@/components/ConfirmModal';
 
@@ -30,6 +34,17 @@ interface ClientItem {
   displayOrder: number;
 }
 
+interface SubmissionItem {
+  id: string;
+  formType: 'contact' | 'quote' | 'career';
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  status: string;
+  createdAt: string;
+}
+
 export default function AdminPanelPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
@@ -37,7 +52,10 @@ export default function AdminPanelPage() {
   const [loginError, setLoginError] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
 
+  const [activeTab, setActiveTab] = useState<'clients' | 'inquiries'>('clients');
+
   const [clients, setClients] = useState<ClientItem[]>([]);
+  const [submissions, setSubmissions] = useState<SubmissionItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -49,12 +67,11 @@ export default function AdminPanelPage() {
   const [displayOrder, setDisplayOrder] = useState<number>(1);
   const [uploading, setUploading] = useState(false);
 
-  // Branded delete-confirmation modal state (replaces native browser confirm())
+  // Branded delete-confirmation modal state
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deleteType, setDeleteTargetType] = useState<'client' | 'submission'>('client');
 
   useEffect(() => {
-    // Verify session with the server — the cookie is HttpOnly so we
-    // can't read it from JS; we just ask the server if it's valid.
     (async () => {
       try {
         const res = await fetch('/api/admin/session');
@@ -62,6 +79,7 @@ export default function AdminPanelPage() {
         if (data.authenticated) {
           setIsAuthenticated(true);
           fetchClients();
+          fetchSubmissions();
         }
       } catch (err) {
         console.error('Session check failed:', err);
@@ -86,6 +104,7 @@ export default function AdminPanelPage() {
         setIsAuthenticated(true);
         setPassword('');
         fetchClients();
+        fetchSubmissions();
       } else {
         setLoginError(data.error || 'Invalid Username/Email or Password.');
       }
@@ -104,6 +123,7 @@ export default function AdminPanelPage() {
     } finally {
       setIsAuthenticated(false);
       setClients([]);
+      setSubmissions([]);
     }
   };
 
@@ -120,6 +140,20 @@ export default function AdminPanelPage() {
       console.error('Error fetching clients:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSubmissions = async () => {
+    try {
+      const res = await fetch('/api/admin/submissions');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.submissions) {
+          setSubmissions(data.submissions);
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching submissions:', err);
     }
   };
 
@@ -157,7 +191,6 @@ export default function AdminPanelPage() {
     setMessage('');
 
     if (editingId) {
-      // Update existing client
       try {
         const res = await fetch('/api/clients', {
           method: 'PUT',
@@ -180,7 +213,6 @@ export default function AdminPanelPage() {
         setMessage('Failed to update client.');
       }
     } else {
-      // Add new client
       try {
         const res = await fetch('/api/clients', {
           method: 'POST',
@@ -212,9 +244,13 @@ export default function AdminPanelPage() {
     setDisplayOrder(client.displayOrder);
   };
 
-  const handleDelete = (id: string) => {
-    // Open the branded confirmation modal instead of the native
-    // browser confirm() popup.
+  const handleDeleteClient = (id: string) => {
+    setDeleteTargetType('client');
+    setDeleteTargetId(id);
+  };
+
+  const handleDeleteSubmission = (id: string) => {
+    setDeleteTargetType('submission');
     setDeleteTargetId(id);
   };
 
@@ -223,17 +259,32 @@ export default function AdminPanelPage() {
     const id = deleteTargetId;
     setDeleteTargetId(null);
 
-    try {
-      const res = await fetch(`/api/clients?id=${id}`, {
-        method: 'DELETE',
-      });
+    if (deleteType === 'client') {
+      try {
+        const res = await fetch(`/api/clients?id=${id}`, {
+          method: 'DELETE',
+        });
 
-      if (res.ok) {
-        setMessage('Client deleted successfully!');
-        fetchClients();
+        if (res.ok) {
+          setMessage('Client deleted successfully!');
+          fetchClients();
+        }
+      } catch (err) {
+        setMessage('Failed to delete client.');
       }
-    } catch (err) {
-      setMessage('Failed to delete client.');
+    } else {
+      try {
+        const res = await fetch(`/api/admin/submissions?id=${id}`, {
+          method: 'DELETE',
+        });
+
+        if (res.ok) {
+          setMessage('Inquiry submission deleted successfully!');
+          fetchSubmissions();
+        }
+      } catch (err) {
+        setMessage('Failed to delete inquiry.');
+      }
     }
   };
 
@@ -259,7 +310,7 @@ export default function AdminPanelPage() {
               Tayaba Enterprises Admin
             </h1>
             <p className="text-xs text-gray-500">
-              Client Management Control Panel
+              Control Panel &amp; Database Management
             </p>
           </div>
 
@@ -286,8 +337,6 @@ export default function AdminPanelPage() {
                 />
                 <User className="w-4 h-4 text-gray-400 absolute left-3 top-3.5" />
               </div>
-              <span className="text-[10px] text-gray-500 mt-1 block">
-              </span>
             </div>
 
             <div>
@@ -315,7 +364,7 @@ export default function AdminPanelPage() {
               <Lock className="w-4 h-4" />
               <span>{loggingIn ? 'Verifying...' : 'Login to Admin Panel'}</span>
             </button>
-            </form>
+          </form>
 
           <div className="pt-4 border-t border-gray-100 text-center">
             <Link href="/" className="text-xs text-brand-green font-semibold hover:underline flex items-center justify-center gap-1">
@@ -340,10 +389,10 @@ export default function AdminPanelPage() {
               Admin Control Panel
             </span>
             <h1 className="text-2xl font-extrabold text-white mt-1">
-              Client Logo Management Dashboard
+              Tayaba Enterprises Admin Dashboard
             </h1>
             <p className="text-xs text-slate-300 mt-0.5">
-              Add, edit, reorder, or delete organizations displayed on the public /clients page and homepage logo strip.
+              Manage client organizations, logo grid, and view customer quote &amp; contact inquiries.
             </p>
           </div>
 
@@ -366,6 +415,33 @@ export default function AdminPanelPage() {
           </div>
         </div>
 
+        {/* Tab Selection Navigation */}
+        <div className="flex gap-2 mb-6 border-b border-gray-200 pb-2">
+          <button
+            onClick={() => setActiveTab('clients')}
+            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 ${
+              activeTab === 'clients'
+                ? 'bg-brand-navy text-white shadow'
+                : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+            }`}
+          >
+            <Building2 className="w-4 h-4" />
+            <span>Clients Logo Management ({clients.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('inquiries')}
+            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 ${
+              activeTab === 'inquiries'
+                ? 'bg-brand-navy text-white shadow'
+                : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+            }`}
+          >
+            <Inbox className="w-4 h-4" />
+            <span>Inquiries &amp; Leads ({submissions.length})</span>
+          </button>
+        </div>
+
         {message && (
           <div className="mb-6 bg-emerald-50 border border-emerald-300 text-emerald-900 p-4 rounded-xl text-sm font-semibold flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -378,199 +454,280 @@ export default function AdminPanelPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Left Form: Add / Edit Client */}
-          <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6">
-            <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                {editingId ? <Edit3 className="w-5 h-5 text-brand-navy" /> : <Plus className="w-5 h-5 text-brand-green" />}
-                {editingId ? 'Edit Client Partner' : 'Add New Client Partner'}
-              </h2>
-              {editingId && (
-                <button
-                  onClick={resetForm}
-                  className="text-xs text-gray-500 hover:text-gray-900 underline flex items-center gap-1"
-                >
-                  <X className="w-3.5 h-3.5" /> Cancel Edit
-                </button>
-              )}
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                  Client Organization Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Siemens or Pakistan State Oil"
-                  className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                  Category / Industry
-                </label>
-                <input
-                  type="text"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  placeholder="e.g. Energy & Oil or Higher Education"
-                  className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                  Display Order
-                </label>
-                <input
-                  type="number"
-                  value={displayOrder}
-                  onChange={(e) => setDisplayOrder(Number(e.target.value))}
-                  className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                  Client Logo Image
-                </label>
-
-                {/* Upload or URL */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={logo}
-                      onChange={(e) => setLogo(e.target.value)}
-                      placeholder="/images/clients/siemens.png"
-                      className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-brand-green"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold px-3 py-2 rounded-lg border border-gray-300 cursor-pointer flex items-center gap-1.5 transition">
-                      <Upload className="w-3.5 h-3.5 text-brand-green" />
-                      <span>{uploading ? 'Uploading...' : 'Upload Logo File'}</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                    </label>
-                    <span className="text-[11px] text-gray-500">Supports PNG, SVG, JPG</span>
-                  </div>
-                </div>
-
-                {/* Logo Preview Box */}
-                {logo && (
-                  <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200 flex items-center gap-3">
-                    <div className="relative w-16 h-12 bg-white rounded border border-gray-200 p-1 flex items-center justify-center">
-                      <Image
-                        src={logo}
-                        alt="Logo preview"
-                        fill
-                        className="object-contain p-1"
-                      />
-                    </div>
-                    <span className="text-xs text-gray-600 truncate font-mono">{logo}</span>
-                  </div>
+        {/* TAB 1: CLIENTS LOGO MANAGEMENT */}
+        {activeTab === 'clients' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Left Form: Add / Edit Client */}
+            <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6">
+              <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  {editingId ? <Edit3 className="w-5 h-5 text-brand-navy" /> : <Plus className="w-5 h-5 text-brand-green" />}
+                  {editingId ? 'Edit Client Partner' : 'Add New Client Partner'}
+                </h2>
+                {editingId && (
+                  <button
+                    onClick={resetForm}
+                    className="text-xs text-gray-500 hover:text-gray-900 underline flex items-center gap-1"
+                  >
+                    <X className="w-3.5 h-3.5" /> Cancel Edit
+                  </button>
                 )}
               </div>
 
-              <button
-                type="submit"
-                className={`w-full text-white font-bold py-3 rounded-lg shadow transition flex items-center justify-center gap-2 ${
-                  editingId ? 'bg-brand-navy hover:bg-brand-navy-dark' : 'bg-brand-green hover:bg-brand-green-hover'
-                }`}
-              >
-                <Save className="w-4 h-4" />
-                <span>{editingId ? 'Save Changes' : 'Add Client Partner'}</span>
-              </button>
-            </form>
-          </div>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Client Organization Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Siemens or Pakistan State Oil"
+                    className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
+                  />
+                </div>
 
-          {/* Right List: Existing Clients */}
-          <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-            <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <List className="w-5 h-5 text-brand-navy" />
-                Current Clients List ({clients.length})
-              </h2>
-              <span className="text-xs text-gray-500">Sorted by Display Order</span>
-            </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Category / Industry
+                  </label>
+                  <input
+                    type="text"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    placeholder="e.g. Energy & Oil or Higher Education"
+                    className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
+                  />
+                </div>
 
-            {loading ? (
-              <div className="py-12 text-center text-gray-500 text-sm">
-                Loading client database...
-              </div>
-            ) : clients.length === 0 ? (
-              <div className="py-12 text-center text-gray-500 text-sm">
-                No clients found in data store.
-              </div>
-            ) : (
-              <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1">
-                {clients.map((client) => (
-                  <div
-                    key={client.id}
-                    className="p-3 bg-slate-50 hover:bg-slate-100/80 rounded-xl border border-gray-200 flex items-center justify-between gap-4 transition"
-                  >
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Display Order
+                  </label>
+                  <input
+                    type="number"
+                    value={displayOrder}
+                    onChange={(e) => setDisplayOrder(Number(e.target.value))}
+                    className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Client Logo Image
+                  </label>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={logo}
+                        onChange={(e) => setLogo(e.target.value)}
+                        placeholder="/images/clients/siemens.png"
+                        className="w-full bg-slate-50 border border-gray-300 rounded-lg p-2.5 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      />
+                    </div>
+
                     <div className="flex items-center gap-3">
-                      <div className="relative w-14 h-10 bg-white rounded border border-gray-200 p-1 flex-shrink-0 flex items-center justify-center">
+                      <label className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold px-3 py-2 rounded-lg border border-gray-300 cursor-pointer flex items-center gap-1.5 transition">
+                        <Upload className="w-3.5 h-3.5 text-brand-green" />
+                        <span>{uploading ? 'Uploading...' : 'Upload Logo File'}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileUpload}
+                          className="hidden"
+                        />
+                      </label>
+                      <span className="text-[11px] text-gray-500">Supports PNG, SVG, JPG</span>
+                    </div>
+                  </div>
+
+                  {logo && (
+                    <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200 flex items-center gap-3">
+                      <div className="relative w-16 h-12 bg-white rounded border border-gray-200 p-1 flex items-center justify-center">
                         <Image
-                          src={client.logo}
-                          alt={client.name}
+                          src={logo}
+                          alt="Logo preview"
                           fill
                           className="object-contain p-1"
                         />
                       </div>
-                      <div>
-                        <div className="font-bold text-gray-900 text-sm">{client.name}</div>
-                        <div className="text-[11px] text-gray-500">
-                          {client.category} • Order: #{client.displayOrder}
+                      <span className="text-xs text-gray-600 truncate font-mono">{logo}</span>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className={`w-full text-white font-bold py-3 rounded-lg shadow transition flex items-center justify-center gap-2 ${
+                    editingId ? 'bg-brand-navy hover:bg-brand-navy-dark' : 'bg-brand-green hover:bg-brand-green-hover'
+                  }`}
+                >
+                  <Save className="w-4 h-4" />
+                  <span>{editingId ? 'Save Changes' : 'Add Client Partner'}</span>
+                </button>
+              </form>
+            </div>
+
+            {/* Right List: Existing Clients */}
+            <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+              <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <List className="w-5 h-5 text-brand-navy" />
+                  Current Clients List ({clients.length})
+                </h2>
+                <span className="text-xs text-gray-500">Sorted by Display Order</span>
+              </div>
+
+              {loading ? (
+                <div className="py-12 text-center text-gray-500 text-sm">
+                  Loading client database...
+                </div>
+              ) : clients.length === 0 ? (
+                <div className="py-12 text-center text-gray-500 text-sm">
+                  No clients found in data store.
+                </div>
+              ) : (
+                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                  {clients.map((client) => (
+                    <div
+                      key={client.id}
+                      className="p-3 bg-slate-50 hover:bg-slate-100/80 rounded-xl border border-gray-200 flex items-center justify-between gap-4 transition"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="relative w-14 h-10 bg-white rounded border border-gray-200 p-1 flex-shrink-0 flex items-center justify-center">
+                          <Image
+                            src={client.logo}
+                            alt={client.name}
+                            fill
+                            className="object-contain p-1"
+                          />
                         </div>
+                        <div>
+                          <div className="font-bold text-gray-900 text-sm">{client.name}</div>
+                          <div className="text-[11px] text-gray-500">
+                            {client.category} • Order: #{client.displayOrder}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button
+                          onClick={() => handleEdit(client)}
+                          className="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition"
+                          title="Edit Client"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+
+                        <button
+                          onClick={() => handleDeleteClient(client.id)}
+                          className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg transition"
+                          title="Delete Client"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
+        )}
+
+        {/* TAB 2: INQUIRIES & LEADS MANAGEMENT */}
+        {activeTab === 'inquiries' && (
+          <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+            <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <Inbox className="w-5 h-5 text-brand-navy" />
+                Submitted Customer Inquiries ({submissions.length})
+              </h2>
+              <button
+                onClick={fetchSubmissions}
+                className="text-xs text-brand-navy hover:underline font-semibold"
+              >
+                Refresh List
+              </button>
+            </div>
+
+            {submissions.length === 0 ? (
+              <div className="py-16 text-center text-gray-500 text-sm">
+                <MessageSquare className="w-10 h-10 mx-auto text-gray-300 mb-2" />
+                No inquiries or quote requests stored in MongoDB yet.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {submissions.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="p-4 bg-slate-50 rounded-xl border border-gray-200 space-y-2 hover:border-gray-300 transition"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${
+                          sub.formType === 'quote' ? 'bg-amber-100 text-amber-800' :
+                          sub.formType === 'career' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {sub.formType === 'quote' ? 'Quote Request' : sub.formType === 'career' ? 'Career App' : 'General Inquiry'}
+                        </span>
+                        <span className="font-bold text-gray-900 text-sm">{sub.name}</span>
+                      </div>
+
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5 text-gray-400" />
+                          {new Date(sub.createdAt).toLocaleString()}
+                        </span>
+
+                        <button
+                          onClick={() => handleDeleteSubmission(sub.id)}
+                          className="text-rose-600 hover:text-rose-800 hover:bg-rose-50 p-1 rounded transition"
+                          title="Delete Submission"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <button
-                        onClick={() => handleEdit(client)}
-                        className="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit Client"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-
-                      <button
-                        onClick={() => handleDelete(client.id)}
-                        className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg transition"
-                        title="Delete Client"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    <div className="flex flex-wrap gap-4 text-xs text-gray-700 font-medium">
+                      <a href={`mailto:${sub.email}`} className="flex items-center gap-1.5 text-brand-navy hover:underline">
+                        <Mail className="w-3.5 h-3.5 text-brand-green" /> {sub.email}
+                      </a>
+                      {sub.phone && (
+                        <a href={`tel:${sub.phone}`} className="flex items-center gap-1.5 text-gray-700 hover:underline">
+                          <Phone className="w-3.5 h-3.5 text-brand-green" /> {sub.phone}
+                        </a>
+                      )}
                     </div>
+
+                    <p className="text-xs text-gray-800 bg-white p-3 rounded-lg border border-gray-200 leading-relaxed whitespace-pre-wrap">
+                      {sub.message}
+                    </p>
                   </div>
                 ))}
               </div>
             )}
           </div>
-
-        </div>
+        )}
 
       </div>
 
-      {/* Branded delete-confirmation modal — replaces the native browser confirm() popup */}
+      {/* Branded delete-confirmation modal */}
       <ConfirmModal
         open={deleteTargetId !== null}
-        title="Delete Client Entry?"
-        message="This will permanently remove the client from the live /clients page. This action cannot be undone."
+        title={deleteType === 'client' ? "Delete Client Entry?" : "Delete Inquiry?"}
+        message={
+          deleteType === 'client'
+            ? "This will permanently remove the client from the live website. This action cannot be undone."
+            : "This will permanently delete this lead inquiry from the database."
+        }
         confirmLabel="Yes, Delete"
         cancelLabel="Cancel"
         tone="danger"
