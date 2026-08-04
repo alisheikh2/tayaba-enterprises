@@ -20,6 +20,7 @@ import {
   Mail,
   User
 } from 'lucide-react';
+import ConfirmModal from '@/components/ConfirmModal';
 
 interface ClientItem {
   id: string;
@@ -34,6 +35,7 @@ export default function AdminPanelPage() {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [loggingIn, setLoggingIn] = useState(false);
 
   const [clients, setClients] = useState<ClientItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,40 +49,62 @@ export default function AdminPanelPage() {
   const [displayOrder, setDisplayOrder] = useState<number>(1);
   const [uploading, setUploading] = useState(false);
 
+  // Branded delete-confirmation modal state (replaces native browser confirm())
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
   useEffect(() => {
-    // Check if session token exists in localStorage
-    const auth = localStorage.getItem('tayaba_admin_auth');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-      fetchClients();
-    }
+    // Verify session with the server — the cookie is HttpOnly so we
+    // can't read it from JS; we just ask the server if it's valid.
+    (async () => {
+      try {
+        const res = await fetch('/api/admin/session');
+        const data = await res.json();
+        if (data.authenticated) {
+          setIsAuthenticated(true);
+          fetchClients();
+        }
+      } catch (err) {
+        console.error('Session check failed:', err);
+      }
+    })();
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const input = usernameOrEmail.toLowerCase().trim();
-    const validIdentifiers = [
-      'admin', 
-      'tayaba_enterprises@yahoo.com', 
-      'admin@tayaba.com', 
-      'admin@tayaba-enterprises.com',
-      'tayaba'
-    ];
-    const validPasswords = ['tayaba2003', 'admin123'];
+    setLoginError('');
+    setLoggingIn(true);
 
-    if (validIdentifiers.includes(input) && validPasswords.includes(password)) {
-      setIsAuthenticated(true);
-      localStorage.setItem('tayaba_admin_auth', 'true');
-      setLoginError('');
-      fetchClients();
-    } else {
-      setLoginError('Invalid Username/Email or Password.');
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usernameOrEmail, password }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setIsAuthenticated(true);
+        setPassword('');
+        fetchClients();
+      } else {
+        setLoginError(data.error || 'Invalid Username/Email or Password.');
+      }
+    } catch (err) {
+      setLoginError('Something went wrong. Please try again.');
+    } finally {
+      setLoggingIn(false);
     }
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('tayaba_admin_auth');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setIsAuthenticated(false);
+      setClients([]);
+    }
   };
 
   const fetchClients = async () => {
@@ -188,8 +212,16 @@ export default function AdminPanelPage() {
     setDisplayOrder(client.displayOrder);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this client entry?')) return;
+  const handleDelete = (id: string) => {
+    // Open the branded confirmation modal instead of the native
+    // browser confirm() popup.
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTargetId) return;
+    const id = deleteTargetId;
+    setDeleteTargetId(null);
 
     try {
       const res = await fetch(`/api/clients?id=${id}`, {
@@ -277,12 +309,13 @@ export default function AdminPanelPage() {
 
             <button
               type="submit"
-              className="w-full bg-brand-navy hover:bg-brand-navy-dark text-white font-bold py-3.5 rounded-lg shadow transition flex items-center justify-center gap-2"
+              disabled={loggingIn}
+              className="w-full bg-brand-navy hover:bg-brand-navy-dark text-white font-bold py-3.5 rounded-lg shadow transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Lock className="w-4 h-4" />
-              <span>Login to Admin Panel</span>
+              <span>{loggingIn ? 'Verifying...' : 'Login to Admin Panel'}</span>
             </button>
-          </form>
+            </form>
 
           <div className="pt-4 border-t border-gray-100 text-center">
             <Link href="/" className="text-xs text-brand-green font-semibold hover:underline flex items-center justify-center gap-1">
@@ -532,6 +565,18 @@ export default function AdminPanelPage() {
         </div>
 
       </div>
+
+      {/* Branded delete-confirmation modal — replaces the native browser confirm() popup */}
+      <ConfirmModal
+        open={deleteTargetId !== null}
+        title="Delete Client Entry?"
+        message="This will permanently remove the client from the live /clients page. This action cannot be undone."
+        confirmLabel="Yes, Delete"
+        cancelLabel="Cancel"
+        tone="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }

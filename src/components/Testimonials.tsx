@@ -120,7 +120,10 @@ export default function Testimonials() {
 
         {/* Animated Carousel Card */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-slate-800/90 rounded-2xl p-8 lg:p-12 border border-slate-700 shadow-2xl relative transition-all duration-500 min-h-[320px] flex flex-col justify-between">
+          <div
+            key={current.id}
+            className="te-animate-fade-slide bg-slate-800/90 rounded-2xl p-8 lg:p-12 border border-slate-700 shadow-2xl relative min-h-[320px] flex flex-col justify-between"
+          >
             
             {/* Top Quote & Rating */}
             <div>

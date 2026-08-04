@@ -24,6 +24,7 @@ import {
 import clientsData from '@/data/clientsData.json';
 import AnimatedSection from '@/components/AnimatedSection';
 import Testimonials from '@/components/Testimonials';
+import AnimatedCounter from '@/components/AnimatedCounter';
 
 export const metadata = {
   title: "Tayaba Enterprises | Karachi's Trusted Photocopier & Printing Solutions Partner",
@@ -175,20 +176,28 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection direction="up">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div className="p-2">
-                <div className="text-3xl lg:text-4xl font-extrabold text-brand-green">2003</div>
+              <div className="p-2 transition-transform duration-300 hover:-translate-y-1">
+                <div className="text-3xl lg:text-4xl font-extrabold text-brand-green">
+                  <AnimatedCounter end={2003} />
+                </div>
                 <div className="text-xs uppercase tracking-wider text-slate-300 font-semibold mt-1">Year Established</div>
               </div>
-              <div className="p-2">
-                <div className="text-3xl lg:text-4xl font-extrabold text-white">12+</div>
+              <div className="p-2 transition-transform duration-300 hover:-translate-y-1">
+                <div className="text-3xl lg:text-4xl font-extrabold text-white">
+                  <AnimatedCounter end={12} suffix="+" />
+                </div>
                 <div className="text-xs uppercase tracking-wider text-slate-300 font-semibold mt-1">Enterprise Clients</div>
               </div>
-              <div className="p-2">
-                <div className="text-3xl lg:text-4xl font-extrabold text-brand-green">5 Top</div>
+              <div className="p-2 transition-transform duration-300 hover:-translate-y-1">
+                <div className="text-3xl lg:text-4xl font-extrabold text-brand-green">
+                  <AnimatedCounter end={5} suffix=" Top" />
+                </div>
                 <div className="text-xs uppercase tracking-wider text-slate-300 font-semibold mt-1">Copier Brands</div>
               </div>
-              <div className="p-2">
-                <div className="text-3xl lg:text-4xl font-extrabold text-white">100%</div>
+              <div className="p-2 transition-transform duration-300 hover:-translate-y-1">
+                <div className="text-3xl lg:text-4xl font-extrabold text-white">
+                  <AnimatedCounter end={100} suffix="%" />
+                </div>
                 <div className="text-xs uppercase tracking-wider text-slate-300 font-semibold mt-1">Client Satisfaction</div>
               </div>
             </div>

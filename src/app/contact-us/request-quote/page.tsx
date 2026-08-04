@@ -6,6 +6,8 @@ import { FileText, Send, CheckCircle2, ShieldCheck, PhoneCall } from 'lucide-rea
 
 export default function RequestQuotePage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -15,9 +17,35 @@ export default function RequestQuotePage() {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitError('');
+    setSubmitting(true);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          formType: 'quote',
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: `Company: ${formData.company || 'N/A'}\nService Requested: ${formData.service}\n\n${formData.message}`,
+        }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(data.error || 'Failed to send your request. Please try again.');
+      }
+    } catch (err) {
+      setSubmitError('Network error. Please check your connection and try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -156,12 +184,19 @@ export default function RequestQuotePage() {
                 />
               </div>
 
+              {submitError && (
+                <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm font-semibold p-3 rounded-lg">
+                  {submitError}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full bg-brand-green hover:bg-brand-green-hover text-white font-bold text-base py-3.5 rounded-lg shadow transition flex items-center justify-center gap-2"
+                disabled={submitting}
+                className="w-full bg-brand-green hover:bg-brand-green-hover text-white font-bold text-base py-3.5 rounded-lg shadow transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4" />
-                <span>Submit Quotation Request</span>
+                <span>{submitting ? 'Sending...' : 'Submit Quotation Request'}</span>
               </button>
 
             </form>

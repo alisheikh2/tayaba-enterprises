@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { isAuthenticatedRequest } from '@/lib/auth';
 
 const dataFilePath = path.join(process.cwd(), 'src/data/clientsData.json');
 
@@ -33,6 +34,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!isAuthenticatedRequest(request)) {
+    return NextResponse.json({ error: 'Unauthorized. Please log in to the admin panel.' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const clients = getClientsData();
@@ -55,6 +60,10 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  if (!isAuthenticatedRequest(request)) {
+    return NextResponse.json({ error: 'Unauthorized. Please log in to the admin panel.' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     let clients = getClientsData();
@@ -80,6 +89,10 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  if (!isAuthenticatedRequest(request)) {
+    return NextResponse.json({ error: 'Unauthorized. Please log in to the admin panel.' }, { status: 401 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
