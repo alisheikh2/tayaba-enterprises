@@ -248,14 +248,13 @@ export default function AdminPanelPage() {
                   type="text"
                   required
                   value={usernameOrEmail}
+                  placeholder="Enter Username or Email"
                   onChange={(e) => setUsernameOrEmail(e.target.value)}
-                  placeholder="admin OR tayaba_enterprises@yahoo.com"
                   className="w-full bg-gray-50 border border-gray-300 rounded-lg p-3 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy"
                 />
                 <User className="w-4 h-4 text-gray-400 absolute left-3 top-3.5" />
               </div>
               <span className="text-[10px] text-gray-500 mt-1 block">
-                Use username <strong className="text-brand-navy">admin</strong> or email <strong className="text-brand-navy">tayaba_enterprises@yahoo.com</strong>
               </span>
             </div>
 
@@ -269,7 +268,7 @@ export default function AdminPanelPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="tayaba2003"
+                  placeholder="Enter Password"
                   className="w-full bg-gray-50 border border-gray-300 rounded-lg p-3 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy"
                 />
                 <Lock className="w-4 h-4 text-gray-400 absolute left-3 top-3.5" />
