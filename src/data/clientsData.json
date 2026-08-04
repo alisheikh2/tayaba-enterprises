@@ -1,0 +1,86 @@
+[
+  {
+    "id": "client-1",
+    "name": "Siemens",
+    "logo": "/images/clients/siemens.png",
+    "category": "Corporate & Industrial",
+    "displayOrder": 1
+  },
+  {
+    "id": "client-2",
+    "name": "PSO (Pakistan State Oil)",
+    "logo": "/images/clients/pso.png",
+    "category": "Energy & Oil",
+    "displayOrder": 2
+  },
+  {
+    "id": "client-3",
+    "name": "NRL (National Refinery Limited)",
+    "logo": "/images/clients/nrl.png",
+    "category": "Energy & Oil",
+    "displayOrder": 3
+  },
+  {
+    "id": "client-4",
+    "name": "NAB (National Accountability Bureau)",
+    "logo": "/images/clients/nab.png",
+    "category": "Government Bureau",
+    "displayOrder": 4
+  },
+  {
+    "id": "client-5",
+    "name": "SSGC (Sui Southern Gas Company)",
+    "logo": "/images/clients/ssgc.png",
+    "category": "Energy & Utilities",
+    "displayOrder": 5
+  },
+  {
+    "id": "client-6",
+    "name": "PAKRE (Pakistan Reinsurance Company Limited)",
+    "logo": "/images/clients/Pakre.jpg",
+    "category": "Financial Services",
+    "displayOrder": 6
+  },
+  {
+    "id": "client-7",
+    "name": "NIT (National Investment Trust)",
+    "logo": "/images/clients/nit.png",
+    "category": "Financial Services",
+    "displayOrder": 7
+  },
+  {
+    "id": "client-8",
+    "name": "Bahria University",
+    "logo": "/images/clients/bahria-university.png",
+    "category": "Higher Education",
+    "displayOrder": 8
+  },
+  {
+    "id": "client-9",
+    "name": "Dow University",
+    "logo": "/images/clients/dow-university.png",
+    "category": "Medical & Higher Education",
+    "displayOrder": 9
+  },
+  {
+    "id": "client-10",
+    "name": "Jinnah University",
+    "logo": "/images/clients/jinnah-university.png",
+    "category": "Higher Education",
+    "displayOrder": 10
+  },
+  {
+    "id": "client-11",
+    "name": "Federal Urdu University",
+    "logo": "/images/clients/federal-urdu-university.png",
+    "category": "Higher Education",
+    "displayOrder": 11
+  },
+  {
+    "id": "client-12",
+    "name": "Javeedan Power Resources",
+    "logo": "/images/clients/javeedan-power.png",
+    "category": "Power & Energy",
+    "displayOrder": 12
+  }
+]
