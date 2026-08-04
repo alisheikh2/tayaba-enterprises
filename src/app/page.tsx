@@ -117,14 +117,6 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="max-w-3xl">
-            
-            <AnimatedSection direction="down" delay={100}>
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold text-emerald-400 mb-6 shadow-md">
-                <Sparkles className="w-4 h-4 text-brand-green" />
-                <span>Established 2003 • Phase VII, DHA, Karachi</span>
-              </div>
-            </AnimatedSection>
-
             <AnimatedSection direction="up" delay={200}>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight mb-6">
                 <span className="text-white block">Karachi&apos;s Trusted Photocopier &amp;</span>
@@ -473,7 +465,7 @@ export default function HomePage() {
               href="/clients"
               className="inline-flex items-center gap-2 bg-brand-green hover:bg-brand-green-hover text-white font-bold text-sm px-6 py-3 rounded-lg shadow transition"
             >
-              <span>View Full Clients Page &amp; Testimonials</span>
+              <span>View Full Clients Page</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

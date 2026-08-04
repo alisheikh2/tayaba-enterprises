@@ -74,7 +74,7 @@ export default function AdminPanelPage() {
       setLoginError('');
       fetchClients();
     } else {
-      setLoginError('Invalid Username/Email or Password. Allowed identifiers: "admin" or "tayaba_enterprises@yahoo.com" with password "tayaba2003"');
+      setLoginError('Invalid Username/Email or Password.');
     }
   };
 
