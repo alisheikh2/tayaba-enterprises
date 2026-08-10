@@ -32,6 +32,13 @@ export const metadata = {
 };
 
 export default function HomePage() {
+  const getInitials = (orgName: string) => {
+    if (!orgName) return 'TE';
+    const parts = orgName.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 3).toUpperCase();
+    return parts.map(p => p[0]).join('').substring(0, 3).toUpperCase();
+  };
+
   const services = [
     {
       id: "photocopying",
@@ -454,12 +461,18 @@ export default function HomePage() {
                   className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center h-28 group relative"
                 >
                   <div className="relative w-full h-16 flex items-center justify-center">
-                    <Image 
-                      src={client.logo} 
-                      alt={`${client.name} Logo`}
-                      fill
-                      className="object-contain transition-transform duration-300 group-hover:scale-105 p-2"
-                    />
+                    {client.logo ? (
+                      <Image 
+                        src={client.logo} 
+                        alt={`${client.name} Logo`}
+                        fill
+                        className="object-contain transition-transform duration-300 group-hover:scale-105 p-2"
+                      />
+                    ) : (
+                      <div className="w-12 h-10 rounded-lg bg-emerald-100 text-brand-green flex items-center justify-center font-extrabold text-xs border border-emerald-200">
+                        {getInitials(client.name)}
+                      </div>
+                    )}
                   </div>
                   <span className="text-[11px] font-bold text-gray-700 text-center line-clamp-1 mt-1">
                     {client.name}

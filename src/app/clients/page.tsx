@@ -34,6 +34,13 @@ export default function ClientsPage() {
     fetchClients();
   }, []);
 
+  const getInitials = (orgName: string) => {
+    if (!orgName) return 'TE';
+    const parts = orgName.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 3).toUpperCase();
+    return parts.map(p => p[0]).join('').substring(0, 3).toUpperCase();
+  };
+
   return (
     <div className="bg-slate-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,12 +79,18 @@ export default function ClientsPage() {
                 className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center justify-between h-36 group hover:-translate-y-1 hover:border-brand-green/30"
               >
                 <div className="relative w-full h-20 flex items-center justify-center p-2">
-                  <Image 
-                    src={client.logo} 
-                    alt={`${client.name} Official Logo`}
-                    fill
-                    className="object-contain transition-transform duration-300 group-hover:scale-105"
-                  />
+                  {client.logo ? (
+                    <Image 
+                      src={client.logo} 
+                      alt={`${client.name} Official Logo`}
+                      fill
+                      className="object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-16 h-12 rounded-lg bg-emerald-100 text-brand-green flex items-center justify-center font-extrabold text-sm border border-emerald-200 shadow-xs">
+                      {getInitials(client.name)}
+                    </div>
+                  )}
                 </div>
                 <div className="text-center mt-2 w-full pt-2 border-t border-gray-100">
                   <span className="text-xs font-bold text-gray-800 line-clamp-1 group-hover:text-brand-navy transition-colors">
