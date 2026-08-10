@@ -5,21 +5,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
-  Phone, 
-  Mail, 
-  MapPin, 
   ChevronDown, 
   Menu, 
-  X, 
-  Clock, 
-  Shield, 
-  Lock 
+  X 
 } from 'lucide-react';
 
 export default function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [activeDesktopDropdown, setActiveDesktopDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -40,49 +35,22 @@ export default function Header() {
 
   const isActive = (path: string) => pathname === path;
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setActiveDesktopDropdown(null);
+      (document.activeElement as HTMLElement)?.blur();
+    }
+  };
+
   return (
     <header className="w-full font-sans sticky top-0 z-50 shadow-md transition-all duration-200">
-      {/* Top Announcement & Quick Contact Bar */}
-      <div className="bg-brand-navy text-white text-xs py-2 px-4 border-b border-blue-900/50">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-slate-200">
-            <span className="flex items-center gap-1.5 font-medium">
-              <MapPin className="w-3.5 h-3.5 text-brand-green" />
-              Phase-VII, DHA, Karachi – 75500
-            </span>
-            <span className="hidden sm:inline text-slate-400">|</span>
-            <a href="tel:02135897614" className="flex items-center gap-1.5 hover:text-white transition">
-              <Phone className="w-3.5 h-3.5 text-brand-green" />
-              021-35897614-15 / +92 334 0367336
-            </a>
-            <span className="hidden lg:inline text-slate-400">|</span>
-            <a href="mailto:tayaba_enterprises@yahoo.com" className="hidden lg:flex items-center gap-1.5 hover:text-white transition">
-              <Mail className="w-3.5 h-3.5 text-brand-green" />
-              tayaba_enterprises@yahoo.com
-            </a>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <span className="bg-brand-green/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-semibold border border-brand-green/30 text-[11px] flex items-center gap-1">
-              <Clock className="w-3 h-3" /> Est. 2003
-            </span>
-            <Link 
-              href="/admin" 
-              className="flex items-center gap-1 text-slate-300 hover:text-white transition hover:underline"
-            >
-              <Lock className="w-3 h-3 text-slate-400" /> Admin
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navigation Bar */}
-      <nav className={`bg-white transition-all duration-300 border-b border-gray-100 ${isScrolled ? 'py-2 shadow-lg' : 'py-3'}`}>
+      {/* Main Navigation Bar — Starts immediately with Logo & Navigation */}
+      <nav className={`bg-white transition-all duration-300 border-b border-gray-100 ${isScrolled ? 'py-2 shadow-lg' : 'py-3.5'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
+          {/* Prominent Header Logo */}
+          <Link href="/" className="flex items-center gap-3.5 group">
+            <div className="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
               <Image 
                 src="/images/logo.png" 
                 alt="Tayaba Enterprises Logo" 
@@ -91,13 +59,13 @@ export default function Header() {
                 priority
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-xl sm:text-2xl text-brand-navy tracking-tight leading-none group-hover:text-brand-green transition-colors">
-                TAYABA ENTERPRISES
+            <div className="flex flex-col justify-center">
+              <span className="font-extrabold text-2xl sm:text-3xl text-brand-navy tracking-tight leading-none group-hover:text-brand-green transition-colors">
+                Tayaba Enterprises
               </span>
-              <span className="text-xs font-bold text-brand-green uppercase tracking-wider mt-0.5 flex items-center gap-1">
+              <span className="text-xs font-bold text-brand-green uppercase tracking-wider mt-1 flex items-center gap-1.5">
                 <span>Copier Solution</span>
-                <span className="text-[10px] bg-gray-100 text-gray-600 px-1.5 rounded font-medium">Since 2003</span>
+                <span className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-medium">Since 2003</span>
               </span>
             </div>
           </Link>
@@ -116,27 +84,46 @@ export default function Header() {
             </Link>
 
             {/* 2. About Us (+ dropdown) */}
-            <div className="relative group">
+            <div 
+              className="relative group"
+              onMouseEnter={() => setActiveDesktopDropdown('about')}
+              onMouseLeave={() => setActiveDesktopDropdown(null)}
+              onFocus={() => setActiveDesktopDropdown('about')}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setActiveDesktopDropdown(null);
+                }
+              }}
+              onKeyDown={handleKeyDown}
+            >
               <Link 
                 href="/about-us" 
+                aria-haspopup="true"
+                aria-expanded={activeDesktopDropdown === 'about'}
                 className={`px-3 py-2 rounded-md text-sm font-semibold inline-flex items-center gap-1 transition-colors ${
                   pathname.startsWith('/about-us') ? 'text-brand-green bg-emerald-50' : 'text-gray-700 hover:text-brand-navy hover:bg-gray-50'
                 }`}
               >
                 About Us
-                <ChevronDown className="w-4 h-4 text-gray-400 group-hover:rotate-180 transition-transform duration-200" />
+                <ChevronDown className="w-4 h-4 text-gray-400 group-hover:rotate-180 group-focus-within:rotate-180 transition-transform duration-200" />
               </Link>
               
-              <div className="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden py-1">
+              <div 
+                className={`absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 transition-all duration-200 z-50 overflow-hidden py-1 ${
+                  activeDesktopDropdown === 'about'
+                    ? 'opacity-100 visible'
+                    : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible'
+                }`}
+              >
                 <Link 
                   href="/about-us" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Company Overview & Team
                 </Link>
                 <Link 
                   href="/about-us/why-choose-us" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green"
                 >
                   Why Choose Tayaba Enterprises
                 </Link>
@@ -144,57 +131,76 @@ export default function Header() {
             </div>
 
             {/* 3. Services (+ dropdown) */}
-            <div className="relative group">
+            <div 
+              className="relative group"
+              onMouseEnter={() => setActiveDesktopDropdown('services')}
+              onMouseLeave={() => setActiveDesktopDropdown(null)}
+              onFocus={() => setActiveDesktopDropdown('services')}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setActiveDesktopDropdown(null);
+                }
+              }}
+              onKeyDown={handleKeyDown}
+            >
               <Link 
                 href="/services" 
+                aria-haspopup="true"
+                aria-expanded={activeDesktopDropdown === 'services'}
                 className={`px-3 py-2 rounded-md text-sm font-semibold inline-flex items-center gap-1 transition-colors ${
                   pathname.startsWith('/services') ? 'text-brand-green bg-emerald-50' : 'text-gray-700 hover:text-brand-navy hover:bg-gray-50'
                 }`}
               >
                 Services
-                <ChevronDown className="w-4 h-4 text-gray-400 group-hover:rotate-180 transition-transform duration-200" />
+                <ChevronDown className="w-4 h-4 text-gray-400 group-hover:rotate-180 group-focus-within:rotate-180 transition-transform duration-200" />
               </Link>
 
-              <div className="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden py-1">
+              <div 
+                className={`absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 transition-all duration-200 z-50 overflow-hidden py-1 ${
+                  activeDesktopDropdown === 'services'
+                    ? 'opacity-100 visible'
+                    : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible'
+                }`}
+              >
                 <Link 
                   href="/services" 
-                  className="block px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100"
+                  className="block px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 hover:text-brand-green focus:text-brand-green"
                 >
                   All Printing & Copier Services
                 </Link>
                 <Link 
                   href="/services/photocopying" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Photocopying Services
                 </Link>
                 <Link 
                   href="/services/printing" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Printing Services
                 </Link>
                 <Link 
                   href="/services/typing" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Typing Services
                 </Link>
                 <Link 
                   href="/services/scanning" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Scanning Services
                 </Link>
                 <Link 
                   href="/services/laminating" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Laminating Services
                 </Link>
                 <Link 
                   href="/services/fax" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green"
                 >
                   Fax Services
                 </Link>
@@ -222,33 +228,52 @@ export default function Header() {
             </Link>
 
             {/* 6. Contact Us (+ dropdown) */}
-            <div className="relative group">
+            <div 
+              className="relative group"
+              onMouseEnter={() => setActiveDesktopDropdown('contact')}
+              onMouseLeave={() => setActiveDesktopDropdown(null)}
+              onFocus={() => setActiveDesktopDropdown('contact')}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setActiveDesktopDropdown(null);
+                }
+              }}
+              onKeyDown={handleKeyDown}
+            >
               <Link 
                 href="/contact-us" 
+                aria-haspopup="true"
+                aria-expanded={activeDesktopDropdown === 'contact'}
                 className={`px-3 py-2 rounded-md text-sm font-semibold inline-flex items-center gap-1 transition-colors ${
                   pathname.startsWith('/contact-us') ? 'text-brand-green bg-emerald-50' : 'text-gray-700 hover:text-brand-navy hover:bg-gray-50'
                 }`}
               >
                 Contact Us
-                <ChevronDown className="w-4 h-4 text-gray-400 group-hover:rotate-180 transition-transform duration-200" />
+                <ChevronDown className="w-4 h-4 text-gray-400 group-hover:rotate-180 group-focus-within:rotate-180 transition-transform duration-200" />
               </Link>
 
-              <div className="absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden py-1">
+              <div 
+                className={`absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-100 transition-all duration-200 z-50 overflow-hidden py-1 ${
+                  activeDesktopDropdown === 'contact'
+                    ? 'opacity-100 visible'
+                    : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible'
+                }`}
+              >
                 <Link 
                   href="/contact-us" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Contact Information
                 </Link>
                 <Link 
                   href="/contact-us/career" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green border-b border-gray-50"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green border-b border-gray-50"
                 >
                   Career
                 </Link>
                 <Link 
                   href="/contact-us/request-quote" 
-                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green"
+                  className="block px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-emerald-50 hover:text-brand-green focus:bg-emerald-50 focus:text-brand-green"
                 >
                   Request A Quote
                 </Link>
@@ -258,7 +283,7 @@ export default function Header() {
             {/* CTA Button */}
             <Link 
               href="/contact-us/request-quote" 
-              className="ml-2 bg-brand-green hover:bg-brand-green-hover text-white font-bold text-sm px-4 py-2 rounded-md transition shadow-sm hover:shadow flex items-center gap-1.5"
+              className="ml-3 bg-brand-green hover:bg-brand-green-hover text-white font-bold text-sm px-5 py-2.5 rounded-lg transition shadow-sm hover:shadow inline-flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0"
             >
               Get Quote
             </Link>
@@ -267,7 +292,7 @@ export default function Header() {
           {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none"
+            className="lg:hidden p-2.5 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -300,6 +325,7 @@ export default function Header() {
                 <button 
                   onClick={() => toggleDropdown('about')}
                   className="p-2 text-gray-500 hover:text-brand-navy"
+                  aria-label="Toggle About Us Menu"
                 >
                   <ChevronDown className={`w-5 h-5 transition-transform ${openDropdown === 'about' ? 'rotate-180' : ''}`} />
                 </button>
@@ -330,6 +356,7 @@ export default function Header() {
                 <button 
                   onClick={() => toggleDropdown('services')}
                   className="p-2 text-gray-500 hover:text-brand-navy"
+                  aria-label="Toggle Services Menu"
                 >
                   <ChevronDown className={`w-5 h-5 transition-transform ${openDropdown === 'services' ? 'rotate-180' : ''}`} />
                 </button>
@@ -413,6 +440,7 @@ export default function Header() {
                 <button 
                   onClick={() => toggleDropdown('contact')}
                   className="p-2 text-gray-500 hover:text-brand-navy"
+                  aria-label="Toggle Contact Us Menu"
                 >
                   <ChevronDown className={`w-5 h-5 transition-transform ${openDropdown === 'contact' ? 'rotate-180' : ''}`} />
                 </button>

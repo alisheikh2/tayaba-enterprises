@@ -121,7 +121,7 @@ export default function HomePage() {
             <AnimatedSection direction="up" delay={200}>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight mb-6">
                 <span className="text-white block">Karachi&apos;s Trusted Photocopier &amp;</span>
-                <span className="text-brand-green block mt-1">Printing Solutions Partner</span>
+                <span className="text-emerald-400 block mt-1">Printing Solutions Partner</span>
               </h1>
             </AnimatedSection>
 
@@ -153,15 +153,15 @@ export default function HomePage() {
             <AnimatedSection direction="up" delay={500}>
               <div className="mt-12 pt-8 border-t border-slate-800/80 grid grid-cols-3 gap-4 text-slate-300 text-xs sm:text-sm font-medium">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span>23+ Years Excellence</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span>Original Toners &amp; Parts</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span>On-Site Engineer Support</span>
                 </div>
               </div>
@@ -177,7 +177,7 @@ export default function HomePage() {
           <AnimatedSection direction="up">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div className="p-2 transition-transform duration-300 hover:-translate-y-1">
-                <div className="text-3xl lg:text-4xl font-extrabold text-brand-green">
+                <div className="text-3xl lg:text-4xl font-extrabold text-emerald-400">
                   <AnimatedCounter end={2003} />
                 </div>
                 <div className="text-xs uppercase tracking-wider text-slate-300 font-semibold mt-1">Year Established</div>
@@ -189,7 +189,7 @@ export default function HomePage() {
                 <div className="text-xs uppercase tracking-wider text-slate-300 font-semibold mt-1">Enterprise Clients</div>
               </div>
               <div className="p-2 transition-transform duration-300 hover:-translate-y-1">
-                <div className="text-3xl lg:text-4xl font-extrabold text-brand-green">
+                <div className="text-3xl lg:text-4xl font-extrabold text-emerald-400">
                   <AnimatedCounter end={5} suffix=" Top" />
                 </div>
                 <div className="text-xs uppercase tracking-wider text-slate-300 font-semibold mt-1">Copier Brands</div>
@@ -211,7 +211,7 @@ export default function HomePage() {
           
           <AnimatedSection direction="up">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-100 px-3 py-1 rounded-full">
+              <span className="text-emerald-900 font-bold text-xs uppercase tracking-widest bg-emerald-100/90 border border-emerald-200 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
                 What We Offer
               </span>
               <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mt-3 mb-4">
@@ -285,7 +285,7 @@ export default function HomePage() {
           
           <AnimatedSection direction="up">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-100 px-3 py-1 rounded-full">
+              <span className="text-emerald-900 font-bold text-xs uppercase tracking-widest bg-emerald-100/90 border border-emerald-200 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
                 Built On Trust &amp; Technical Excellence
               </span>
               <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mt-3">
@@ -311,7 +311,7 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
                   <div className="absolute bottom-3 left-4 text-white font-bold text-sm flex items-center gap-2">
-                    <Wrench className="w-4 h-4 text-brand-green" /> Factory Trained Technicians
+                    <Wrench className="w-4 h-4 text-emerald-400" /> Factory Trained Technicians
                   </div>
                 </div>
                 <div className="p-6">
@@ -334,7 +334,7 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
                   <div className="absolute bottom-3 left-4 text-white font-bold text-sm flex items-center gap-2">
-                    <Boxes className="w-4 h-4 text-brand-green" /> Ready Machine Inventory
+                    <Boxes className="w-4 h-4 text-emerald-400" /> Ready Machine Inventory
                   </div>
                 </div>
                 <div className="p-6">
@@ -357,7 +357,7 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
                   <div className="absolute bottom-3 left-4 text-white font-bold text-sm flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-brand-green" /> Genuine Consumables
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" /> Genuine Consumables
                   </div>
                 </div>
                 <div className="p-6">
@@ -384,7 +384,7 @@ export default function HomePage() {
           <AnimatedSection direction="up">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
               <div>
-                <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-950/80 border border-emerald-800 px-3 py-1 rounded-full">
+                <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 shadow-sm">
                   Business Partners &amp; Brands
                 </span>
                 <h2 className="text-3xl font-extrabold text-white mt-3">
@@ -394,7 +394,7 @@ export default function HomePage() {
 
               <Link 
                 href="/machine-brands"
-                className="inline-flex items-center gap-2 text-brand-green font-bold hover:underline"
+                className="inline-flex items-center gap-2 text-emerald-400 font-bold hover:underline"
               >
                 <span>View All Brands &amp; Models</span>
                 <ArrowRight className="w-4 h-4" />
@@ -405,12 +405,12 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {machineBrands.map((b, idx) => (
               <AnimatedSection key={idx} direction="up" delay={idx * 100}>
-                <div className="bg-slate-800/90 rounded-xl p-6 border border-slate-700 hover:border-brand-green transition-all duration-300 flex flex-col justify-between h-full">
+                <div className="bg-slate-800/90 rounded-xl p-6 border border-slate-700 hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between h-full">
                   <div>
                     <h3 className="text-2xl font-extrabold text-white mb-1 tracking-tight">
                       {b.name}
                     </h3>
-                    <div className="text-xs text-brand-green font-bold mb-3">{b.tagline}</div>
+                    <div className="text-xs text-emerald-400 font-bold mb-3">{b.tagline}</div>
                     <p className="text-slate-300 text-xs leading-relaxed">
                       {b.desc}
                     </p>
@@ -418,7 +418,7 @@ export default function HomePage() {
                   
                   <div className="mt-6 pt-4 border-t border-slate-700/80 text-[11px] text-slate-400 font-semibold flex items-center justify-between">
                     <span>Sales &amp; Rentals</span>
-                    <span className="text-brand-green">Available</span>
+                    <span className="text-emerald-400">Available</span>
                   </div>
                 </div>
               </AnimatedSection>
@@ -434,7 +434,7 @@ export default function HomePage() {
           
           <AnimatedSection direction="up">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full">
+              <span className="text-emerald-900 font-bold text-xs uppercase tracking-widest bg-emerald-100/90 border border-emerald-200 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
                 Our Esteemed Clients
               </span>
               <h2 className="text-3xl font-extrabold text-gray-900 mt-2">
@@ -458,7 +458,7 @@ export default function HomePage() {
                       src={client.logo} 
                       alt={`${client.name} Logo`}
                       fill
-                      className="object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 p-2"
+                      className="object-contain transition-transform duration-300 group-hover:scale-105 p-2"
                     />
                   </div>
                   <span className="text-[11px] font-bold text-gray-700 text-center line-clamp-1 mt-1">
@@ -483,7 +483,7 @@ export default function HomePage() {
       </section>
 
       {/* 8. CTA BANNER */}
-      <section className="bg-gradient-to-r from-brand-navy to-blue-950 text-white py-16">
+      <section className="bg-brand-navy text-white py-16 border-t border-blue-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection direction="up">
             <h2 className="text-3xl lg:text-4xl font-extrabold mb-4">
@@ -503,7 +503,7 @@ export default function HomePage() {
                 href="tel:02135897614"
                 className="bg-white/10 hover:bg-white/20 text-white font-semibold text-base px-6 py-3.5 rounded-lg border border-white/20 transition flex items-center gap-2"
               >
-                <PhoneCall className="w-5 h-5 text-brand-green" />
+                <PhoneCall className="w-5 h-5 text-emerald-400" />
                 <span>Call: 021-35897614-15</span>
               </a>
             </div>

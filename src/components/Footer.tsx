@@ -7,8 +7,6 @@ import {
   Mail, 
   Printer, 
   CheckCircle2, 
-  Building2, 
-  Clock, 
   Shield 
 } from 'lucide-react';
 
@@ -33,7 +31,7 @@ export default function Footer() {
               </div>
               <div>
                 <h3 className="text-xl font-extrabold text-white tracking-tight">
-                  TAYABA ENTERPRISES
+                  Tayaba Enterprises
                 </h3>
                 <p className="text-xs text-brand-green font-bold uppercase tracking-wider">
                   Copier Solution • Est. 2003
@@ -220,9 +218,11 @@ export default function Footer() {
             © 2003 - 2026 <strong className="text-slate-300">Tayaba Enterprises</strong>. All Rights Reserved.
           </div>
           <div className="flex items-center gap-4 text-slate-400">
-            <span>DHA Phase-VII, Karachi, Pakistan</span>
+            <Link href="/privacy-policy" className="hover:text-white transition">Privacy Policy</Link>
             <span>•</span>
-            <Link href="/admin" className="hover:text-white transition">Admin Panel</Link>
+            <Link href="/terms-of-service" className="hover:text-white transition">Terms &amp; Conditions</Link>
+            <span>•</span>
+            <span>DHA Phase-VII, Karachi, Pakistan</span>
           </div>
         </div>
       </div>

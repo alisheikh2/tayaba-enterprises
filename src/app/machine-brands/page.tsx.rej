@@ -1,0 +1,33 @@
+diff a/src/app/machine-brands/page.tsx b/src/app/machine-brands/page.tsx	(rejected hunks)
+@@ -2,13 +2,10 @@ import React from 'react';
+ import Link from 'next/link';
+ import Image from 'next/image';
+ import { 
+-  Printer, 
+   CheckCircle2, 
+   ArrowRight, 
+-  ShieldCheck, 
+   Award, 
+   Wrench, 
+-  Sparkles,
+   Zap
+ } from 'lucide-react';
+ 
+@@ -65,7 +62,7 @@ export default function MachineBrandsPage() {
+       id: "sharp",
+       name: "Sharp Photocopiers",
+       series: "Sharp MX Series Multifunction Systems",
+-      image: "/images/copier-1.jpg",
++      image: "/images/sharp-mx-series.jpg",
+       desc: "Sharp MX series digital photocopiers combine sleek ergonomic design with effortless touchscreen control. Designed to streamline office document collaboration, Sharp machines feature retractable keyboards, wireless LAN connectivity, micro-fine toner technology, and integrated multi-layered network defense security.",
+       features: [
+         "Retractable QWERTY keyboard for quick scanning index",
+@@ -79,7 +76,7 @@ export default function MachineBrandsPage() {
+       id: "xerox",
+       name: "Xerox WorkCentre",
+       series: "Xerox WorkCentre & VersaLink Technology",
+-      image: "/images/copier-2.jpg",
++      image: "/images/xerox-workcentre.jpg",
+       desc: "As the inventor of modern xerography, Xerox sets the standard for enterprise document management. Xerox WorkCentre and VersaLink copiers feature ConnectKey technology, enabling secure mobile printing, cloud app repository access, and vibrant EA toner performance across high-volume office workloads.",
+       features: [
+         "Xerox ConnectKey cloud application library",

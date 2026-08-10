@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FileText, Send, CheckCircle2, ShieldCheck, PhoneCall } from 'lucide-react';
+import { FileText, Send, CheckCircle2 } from 'lucide-react';
 
 export default function RequestQuotePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -93,10 +93,11 @@ export default function RequestQuotePage() {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                  <label htmlFor="quote-name" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Your Full Name *
                   </label>
                   <input
+                    id="quote-name"
                     type="text"
                     required
                     value={formData.name}
@@ -107,10 +108,11 @@ export default function RequestQuotePage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                  <label htmlFor="quote-company" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Organization / Company Name
                   </label>
                   <input
+                    id="quote-company"
                     type="text"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -122,10 +124,11 @@ export default function RequestQuotePage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                  <label htmlFor="quote-phone" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Phone Number *
                   </label>
                   <input
+                    id="quote-phone"
                     type="tel"
                     required
                     value={formData.phone}
@@ -136,10 +139,11 @@ export default function RequestQuotePage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                  <label htmlFor="quote-email" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Email Address *
                   </label>
                   <input
+                    id="quote-email"
                     type="email"
                     required
                     value={formData.email}
@@ -151,10 +155,11 @@ export default function RequestQuotePage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                <label htmlFor="quote-service" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                   Service / Product Needed *
                 </label>
                 <select
+                  id="quote-service"
                   value={formData.service}
                   onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                   className="w-full bg-slate-50 border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
@@ -171,10 +176,11 @@ export default function RequestQuotePage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                <label htmlFor="quote-message" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                   Project Details / Monthly Print Volume *
                 </label>
                 <textarea
+                  id="quote-message"
                   required
                   rows={4}
                   value={formData.message}

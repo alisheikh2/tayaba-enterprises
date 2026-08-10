@@ -1,16 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { 
-  CheckCircle2, 
   Award, 
   ShieldCheck, 
   Clock, 
-  Zap, 
+  TrendingUp,
   Wrench, 
   Sparkles, 
-  ArrowRight,
-  TrendingUp,
-  Headphones
+  ArrowRight
 } from 'lucide-react';
 
 export const metadata = {
@@ -59,8 +56,8 @@ export default function WhyChooseUsSubPage() {
         {/* Banner */}
         <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 mb-12 shadow-xl">
           <div className="max-w-3xl">
-            <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-950 border border-emerald-800 px-3 py-1 rounded-full">
-              Why Partner With Us
+            <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 shadow-sm">
+              <Award className="w-4 h-4 text-emerald-400" /> Why Partner With Us
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-4 mb-4">
               Why Choose Tayaba Enterprises?
@@ -95,7 +92,7 @@ export default function WhyChooseUsSubPage() {
         </div>
 
         {/* Executive Commitment Card */}
-        <div className="bg-gradient-to-r from-slate-900 to-brand-navy text-white rounded-2xl p-8 lg:p-12 shadow-xl flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 shadow-xl flex flex-col md:flex-row justify-between items-center gap-8 border border-blue-900/50">
           <div className="max-w-2xl">
             <h2 className="text-2xl lg:text-3xl font-bold mb-3">
               Ready to Upgrade Your Office Printing Infrastructure?

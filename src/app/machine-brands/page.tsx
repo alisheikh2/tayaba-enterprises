@@ -2,13 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
-  Printer, 
   CheckCircle2, 
   ArrowRight, 
-  ShieldCheck, 
   Award, 
   Wrench, 
-  Sparkles,
   Zap
 } from 'lucide-react';
 
@@ -65,7 +62,7 @@ export default function MachineBrandsPage() {
       id: "sharp",
       name: "Sharp Photocopiers",
       series: "Sharp MX Series Multifunction Systems",
-      image: "/images/copier-1.jpg",
+      image: "/images/sharp-mx-series.jpg",
       desc: "Sharp MX series digital photocopiers combine sleek ergonomic design with effortless touchscreen control. Designed to streamline office document collaboration, Sharp machines feature retractable keyboards, wireless LAN connectivity, micro-fine toner technology, and integrated multi-layered network defense security.",
       features: [
         "Retractable QWERTY keyboard for quick scanning index",
@@ -79,7 +76,7 @@ export default function MachineBrandsPage() {
       id: "xerox",
       name: "Xerox WorkCentre",
       series: "Xerox WorkCentre & VersaLink Technology",
-      image: "/images/copier-2.jpg",
+      image: "/images/xerox-workcentre.jpg",
       desc: "As the inventor of modern xerography, Xerox sets the standard for enterprise document management. Xerox WorkCentre and VersaLink copiers feature ConnectKey technology, enabling secure mobile printing, cloud app repository access, and vibrant EA toner performance across high-volume office workloads.",
       features: [
         "Xerox ConnectKey cloud application library",
@@ -98,8 +95,8 @@ export default function MachineBrandsPage() {
         {/* Banner */}
         <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 mb-12 shadow-xl">
           <div className="max-w-3xl">
-            <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-950 border border-emerald-800 px-3 py-1 rounded-full">
-              Business Partners &amp; Machine Inventory
+            <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 shadow-sm">
+              <Zap className="w-4 h-4 text-emerald-400" /> Business Partners &amp; Machine Inventory
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-4 mb-4">
               World-Class Photocopier Machine Brands
@@ -203,7 +200,7 @@ export default function MachineBrandsPage() {
         </div>
 
         {/* Quote Callout */}
-        <div className="bg-gradient-to-r from-slate-900 via-brand-navy to-slate-900 text-white rounded-2xl p-8 lg:p-12 text-center shadow-xl">
+        <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 text-center shadow-xl border border-blue-900/50">
           <h2 className="text-2xl lg:text-3xl font-extrabold mb-3">
             Not Sure Which Photocopier Brand Fits Your Monthly Workload?
           </h2>

@@ -13,7 +13,8 @@ import {
   Sparkles,
   Zap,
   Building2,
-  Clock
+  Clock,
+  Layers
 } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 
@@ -82,8 +83,8 @@ export default function ServicesMainPage() {
         <AnimatedSection direction="down">
           <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 mb-12 shadow-xl">
             <div className="max-w-3xl">
-              <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-950 border border-emerald-800 px-3 py-1 rounded-full">
-                Full Services Portfolio
+              <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 shadow-sm">
+                <Layers className="w-4 h-4 text-emerald-400" /> Full Services Portfolio
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-4 mb-4">
                 Comprehensive Printing &amp; Document Solutions
@@ -157,14 +158,14 @@ export default function ServicesMainPage() {
 
         {/* Quote Banner */}
         <AnimatedSection direction="up">
-          <div className="bg-emerald-900 text-white rounded-2xl p-8 lg:p-10 shadow-xl flex flex-col sm:flex-row justify-between items-center gap-6">
+          <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-10 shadow-xl flex flex-col sm:flex-row justify-between items-center gap-6 border border-blue-900/50">
             <div>
               <h3 className="text-2xl font-bold">Have a Bulk Printing or Scanning Job?</h3>
-              <p className="text-emerald-100 text-sm mt-1">Get discounted rates for large volume corporate printing contracts.</p>
+              <p className="text-slate-300 text-sm mt-1">Get discounted rates for large volume corporate printing contracts.</p>
             </div>
             <Link
               href="/contact-us/request-quote"
-              className="bg-white text-emerald-950 font-extrabold px-6 py-3.5 rounded-lg shadow hover:bg-emerald-50 transition flex-shrink-0"
+              className="bg-brand-green hover:bg-brand-green-hover text-white font-extrabold px-6 py-3.5 rounded-lg shadow transition flex-shrink-0"
             >
               Request Custom Quotation
             </Link>

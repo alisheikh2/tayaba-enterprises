@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Mail, MessageCircle, Facebook, PhoneCall } from 'lucide-react';
+import { Mail, MessageCircle, Facebook } from 'lucide-react';
 
 export default function FloatingSocial() {
   const whatsappUrl = "https://wa.me/923340367336?text=Hi,%20I'm%20interested%20in%20your%20printing/photocopier%20services";
@@ -10,8 +10,8 @@ export default function FloatingSocial() {
 
   return (
     <>
-      {/* Fixed Left Sidebar Social Icons */}
-      <div className="fixed left-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-1 shadow-lg group">
+      {/* Desktop-Only Left Sidebar Social Icons (Hidden on Mobile to Prevent Text Overlap) */}
+      <div className="hidden md:flex fixed left-0 top-1/2 -translate-y-1/2 z-40 flex-col gap-1.5 shadow-lg group">
         {/* WhatsApp Icon */}
         <a
           href={whatsappUrl}
@@ -21,7 +21,7 @@ export default function FloatingSocial() {
           title="Chat on WhatsApp"
           aria-label="Chat on WhatsApp"
         >
-          <MessageCircle className="w-6 h-6 flex-shrink-0" />
+          <MessageCircle className="w-6 h-6 flex-shrink-0" aria-hidden="true" />
           <span className="font-semibold text-xs whitespace-nowrap opacity-0 group-hover/item:opacity-100 transition-opacity duration-200">
             Chat on WhatsApp
           </span>
@@ -34,7 +34,7 @@ export default function FloatingSocial() {
           title="Send Email"
           aria-label="Send Email"
         >
-          <Mail className="w-6 h-6 flex-shrink-0" />
+          <Mail className="w-6 h-6 flex-shrink-0" aria-hidden="true" />
           <span className="font-semibold text-xs whitespace-nowrap opacity-0 group-hover/item:opacity-100 transition-opacity duration-200">
             Email Us
           </span>
@@ -49,24 +49,24 @@ export default function FloatingSocial() {
           title="Visit Facebook Page"
           aria-label="Visit Facebook Page"
         >
-          <Facebook className="w-6 h-6 flex-shrink-0" />
+          <Facebook className="w-6 h-6 flex-shrink-0" aria-hidden="true" />
           <span className="font-semibold text-xs whitespace-nowrap opacity-0 group-hover/item:opacity-100 transition-opacity duration-200">
             Facebook
           </span>
         </a>
       </div>
 
-      {/* Floating Bottom-Right WhatsApp Quick Button (Mobile & Desktop) */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+      {/* Floating Bottom-Right WhatsApp Quick Button (Mobile & Desktop - Touch Target >= 48px) */}
+      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-[#25D366] hover:bg-[#20ba5c] text-white p-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 flex items-center gap-2 border-2 border-white animate-bounce"
+          className="bg-[#25D366] hover:bg-[#20ba5c] text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 flex items-center gap-2 border-2 border-white animate-bounce"
           aria-label="Quick WhatsApp Contact"
         >
-          <MessageCircle className="w-7 h-7" />
-          <span className="hidden md:inline font-bold text-sm pr-1">WhatsApp Us</span>
+          <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" />
+          <span className="hidden sm:inline font-bold text-sm pr-1">WhatsApp Us</span>
         </a>
       </div>
     </>

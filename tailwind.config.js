@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,10 +8,10 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          green: "#038F48",
-          "green-hover": "#027339",
-          navy: "#2710A6",
-          "navy-dark": "#1b0b7a",
+          green: "#026937",
+          "green-hover": "#01532b",
+          navy: "#0F2C59",
+          "navy-dark": "#0A1E40",
           gray: "#CDC7D5",
           "gray-light": "#F7F6F9",
         }

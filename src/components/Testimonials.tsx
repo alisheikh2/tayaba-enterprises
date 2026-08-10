@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2, Building } from 'lucide-react';
+import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 
 interface Testimonial {
   id: number;
@@ -107,8 +107,8 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-950 border border-emerald-800 px-3 py-1 rounded-full">
-            Client Testimonials
+          <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 shadow-sm">
+            <Star className="w-4 h-4 text-emerald-400" /> Client Testimonials
           </span>
           <h2 className="text-3xl lg:text-4xl font-extrabold text-white mt-3">
             What Our Valued Clients Say
@@ -135,15 +135,15 @@ export default function Testimonials() {
                   <span className="text-xs font-bold text-slate-300 ml-2">5.0 / 5.0 Verified Client</span>
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 text-xs text-brand-green bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-800">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center gap-1.5 text-xs text-emerald-300 bg-emerald-950/90 px-3.5 py-1.5 rounded-full border border-emerald-700/80 shadow-sm">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                   <span>{current.serviceUsed}</span>
                 </div>
               </div>
 
               {/* Review Text */}
               <div className="relative pl-6 sm:pl-8 border-l-4 border-brand-green mb-8">
-                <Quote className="w-8 h-8 text-brand-green/30 absolute -top-3 -left-3 -z-10" />
+                <Quote className="w-8 h-8 text-emerald-400/30 absolute -top-3 -left-3 -z-10" />
                 <p className="text-slate-100 text-base sm:text-lg lg:text-xl font-normal leading-relaxed italic">
                   &ldquo;{current.comment}&rdquo;
                 </p>
@@ -154,7 +154,7 @@ export default function Testimonials() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-6 border-t border-slate-700/80 gap-4">
               <div>
                 <div className="font-extrabold text-white text-lg">{current.name}</div>
-                <div className="text-xs text-brand-green font-bold">
+                <div className="text-xs text-emerald-400 font-bold">
                   {current.role} • <span className="text-slate-300 font-normal">{current.organization} ({current.location})</span>
                 </div>
               </div>

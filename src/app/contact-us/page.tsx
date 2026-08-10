@@ -6,7 +6,6 @@ import {
   MapPin, 
   Phone, 
   Mail, 
-  Printer, 
   MessageCircle, 
   Facebook, 
   Clock, 
@@ -58,8 +57,8 @@ export default function ContactUsPage() {
         {/* Banner */}
         <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 mb-12 shadow-xl">
           <div className="max-w-3xl">
-            <span className="text-brand-green font-bold text-xs uppercase tracking-widest bg-emerald-950 border border-emerald-800 px-3 py-1 rounded-full">
-              Get In Touch
+            <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 shadow-sm">
+              <MapPin className="w-4 h-4 text-emerald-400" /> Get In Touch
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-4 mb-4">
               Contact Tayaba Enterprises
@@ -170,10 +169,11 @@ export default function ContactUsPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                  <label htmlFor="contact-name" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Your Name *
                   </label>
                   <input
+                    id="contact-name"
                     type="text"
                     required
                     value={formData.name}
@@ -185,10 +185,11 @@ export default function ContactUsPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    <label htmlFor="contact-email" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                       Email Address *
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
                       value={formData.email}
@@ -199,10 +200,11 @@ export default function ContactUsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    <label htmlFor="contact-phone" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                       Phone Number *
                     </label>
                     <input
+                      id="contact-phone"
                       type="tel"
                       required
                       value={formData.phone}
@@ -214,10 +216,11 @@ export default function ContactUsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                  <label htmlFor="contact-message" className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Message / Inquiries *
                   </label>
                   <textarea
+                    id="contact-message"
                     required
                     rows={4}
                     value={formData.message}

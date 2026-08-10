@@ -82,5 +82,12 @@
     "logo": "/images/clients/javeedan-power.png",
     "category": "Power & Energy",
     "displayOrder": 12
+  },
+  {
+    "id": "client-1786359720106",
+    "name": "ABC",
+    "logo": "",
+    "category": "Corporate Client",
+    "displayOrder": 13
   }
 ]

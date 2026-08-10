@@ -1,0 +1,10 @@
+diff a/src/app/globals.css b/src/app/globals.css	(rejected hunks)
+@@ -14,7 +14,7 @@
+ }
+ 
+ .bg-pattern {
+-  background-image: radial-gradient(rgba(39, 16, 166, 0.05) 1px, transparent 1px);
++  background-image: radial-gradient(rgba(15, 44, 89, 0.05) 1px, transparent 1px);
+   background-size: 24px 24px;
+ }
+ 

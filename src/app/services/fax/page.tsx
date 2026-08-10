@@ -16,9 +16,9 @@ export default function FaxServicePage() {
         
         <AnimatedSection direction="down">
           <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 mb-10 shadow-xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-xs font-semibold text-emerald-300 mb-4">
-              <Send className="w-4 h-4 text-brand-green" /> Telecommunication Unit
-            </div>
+            <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 mb-4 shadow-sm">
+              <Send className="w-4 h-4 text-emerald-400" /> Telecommunication Unit
+            </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
               Fax Services in Karachi
             </h1>
@@ -79,7 +79,7 @@ export default function FaxServicePage() {
         </div>
 
         <AnimatedSection direction="up">
-          <div className="bg-brand-navy text-white p-8 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-6 shadow-lg">
+          <div className="bg-brand-navy text-white p-8 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-6 shadow-lg border border-blue-900/50">
             <div>
               <h3 className="text-xl font-bold">Official Fax Line: 021-35897611</h3>
               <p className="text-slate-300 text-sm">Stationed at 1st Floor, Plot No. 4-E/II, Jami Commercial Street No.06, DHA Phase-VII, Karachi.</p>

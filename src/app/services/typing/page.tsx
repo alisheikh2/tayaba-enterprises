@@ -16,9 +16,9 @@ export default function TypingServicePage() {
         
         <AnimatedSection direction="down">
           <div className="bg-brand-navy text-white rounded-2xl p-8 lg:p-12 mb-10 shadow-xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-xs font-semibold text-emerald-300 mb-4">
-              <Keyboard className="w-4 h-4 text-brand-green" /> Document Composing Desk
-            </div>
+            <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest bg-emerald-950/90 border border-emerald-700/80 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 mb-4 shadow-sm">
+              <Keyboard className="w-4 h-4 text-emerald-400" /> Document Composing Desk
+            </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
               English &amp; InPage Urdu Typing Services
             </h1>
@@ -79,7 +79,7 @@ export default function TypingServicePage() {
         </div>
 
         <AnimatedSection direction="up">
-          <div className="bg-brand-navy text-white p-8 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-6 shadow-lg">
+          <div className="bg-brand-navy text-white p-8 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-6 shadow-lg border border-blue-900/50">
             <div>
               <h3 className="text-xl font-bold">Need Urgent Typing or Composing?</h3>
               <p className="text-slate-300 text-sm">Visit our DHA Phase 7 office or send handwritten drafts for prompt composing.</p>
